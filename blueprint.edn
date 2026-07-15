@@ -1,0 +1,45 @@
+{:itonami.blueprint/id "cloud-itonami-isic-1820"
+ :itonami.blueprint/name "Reproduction of recorded media"
+ :itonami.blueprint/isic-rev5 "1820"
+ :itonami.blueprint/domain :media-reproduction/duplication
+ :itonami.blueprint/license "AGPL-3.0-or-later"
+ :itonami.blueprint/social-impact [:worker-safety :product-quality :copyright-integrity]
+ :itonami.blueprint/governor :media-reproduction-plant-operations-governor
+ :itonami.blueprint/robotics true
+ :itonami.blueprint/required-technologies [:robotics :identity :forms :dmn :bpmn :audit-ledger :cae]
+ :itonami.blueprint/status :public-oss
+ :itonami.blueprint/maturity :implemented
+ :itonami.blueprint/implemented-slice
+ "MediaReproductionAdvisor ⊣ Media Reproduction Plant Operations
+ Governor, langgraph-clj StateGraph, append-only audit ledger. A plant
+ OPERATIONS COORDINATION actor for reproduction of recorded media
+ (mass-duplication of pre-recorded content -- disc-replication lines
+ that mass-produce CD/DVD/Blu-ray copies from an authorized master,
+ software-duplication lines that mass-produce software/data media, and
+ print-and-package lines that print/label and package the duplicated
+ output) -- not direct duplication-line-equipment control authority
+ and not a copyright-licensing authority (this actor never authorizes
+ reproduction of copyrighted content on a rights holder's behalf; that
+ authorization must already exist before any batch is even logged).
+ Distinct from ISIC 2680 (manufacture of the blank magnetic/optical
+ media substrate itself): this actor coordinates the DUPLICATION
+ service that reproduces already-licensed recorded content onto
+ already-manufactured media, not the manufacture of the media
+ substrate. Four ops (`:log-production-batch` /
+ `:schedule-maintenance` / `:flag-safety-concern` /
+ `:coordinate-shipment`), all `:effect :propose` only. Twelve concrete
+ governor checks elaborate this blueprint's four HARD invariants:
+ propose-only effect, closed op allowlist, closed proposal-effect
+ allowlist (no direct duplication-line-equipment control), permanent
+ equipment-actuate block, permanent copyright-licensing-authority
+ block (this actor never self-issues a reproduction-license/copyright-
+ clearance authorization), independent equipment verification/
+ registration before maintenance scheduling, independent batch
+ verification/registration before shipment coordination, independent
+ shipment-quantity recompute against the batch's own logged production
+ quantity, double-schedule guard, content-type validation, disc
+ thickness plausibility validation, and defect-rate plausibility
+ validation. Safety-concern flagging (equipment-safety/quality-defect
+ concern) ALWAYS escalates to a human plant supervisor;
+ `:log-production-batch` is the only op eligible to auto-commit, and
+ only at phase 3 when governor-clean."}
