@@ -13,7 +13,8 @@
   proved trustworthy (unlike a prior fleet incident where a copy-pasted
   sim.cljc hard-held on every call because its ids didn't exist in the
   real seed data), so this reuses its scenario shape."
-  (:require [clojure.string :as str]
+  (:require [jp-go-dds.skin]
+            [clojure.string :as str]
             [clojure.set :as set]
             [clojure.java.io :as io]
             [mediarepro.store :as store]
@@ -232,7 +233,9 @@ code { font-size: 12px; background: #f4f4f4; padding: 1px 4px; border-radius: 3p
 (defn render [db]
   (str "<!doctype html>\n<html lang=\"ja\">\n<head>\n<meta charset=\"utf-8\">\n"
        "<title>mediarepro.render-html -- Media Reproduction Governor operator console</title>\n"
-       "<style>\n" css "\n</style>\n</head>\n<body>\n"
+       "<style>"
+   (jp-go-dds.skin/dds+skin)
+   "</style>\n</head>\n<body>\n"
        "<header class=\"bar\"><h1>Media Reproduction Governor -- Operator Console</h1>"
        "<span class=\"badge\">ISIC 1820 &middot; phase " (esc phase/default-phase) "</span></header>\n<main>\n"
 
