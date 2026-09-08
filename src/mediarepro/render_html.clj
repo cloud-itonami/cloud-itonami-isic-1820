@@ -14,7 +14,7 @@
   sim.cljc hard-held on every call because its ids didn't exist in the
   real seed data), so this reuses its scenario shape."
   (:require [jp-go-dds.skin]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             [clojure.set :as set]
             [clojure.java.io :as io]
             [mediarepro.store :as store]
