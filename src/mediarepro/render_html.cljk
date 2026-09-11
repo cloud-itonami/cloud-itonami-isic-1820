@@ -6,7 +6,7 @@
   across reruns.
 
   The scenario below was cross-checked against `mediarepro.sim` (this
-  repo's own `clojure -M:dev:run` demo) and, independently, against the
+  repo's own `kbb -M:dev:run` demo) and, independently, against the
   real seed data in `mediarepro.store/sample-batches`/`sample-equipment`
   and the real rule set in `mediarepro.governor` -- every id/op used here
   is real, not copy-pasted from an unrelated actor. `mediarepro.sim`
