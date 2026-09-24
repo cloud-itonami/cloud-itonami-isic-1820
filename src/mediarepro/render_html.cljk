@@ -16,7 +16,7 @@
   (:require [jp-go-dds.skin]
             [kotoba.lang.text :as str]
             [clojure.set :as set]
-            [clojure.java.io :as io]
+            [kotoba.io :as io]
             [mediarepro.store :as store]
             [mediarepro.operation :as op]
             [mediarepro.phase :as phase]
