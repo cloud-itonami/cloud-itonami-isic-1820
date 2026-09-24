@@ -15,7 +15,7 @@
   real seed data), so this reuses its scenario shape."
   (:require [jp-go-dds.skin]
             [kotoba.lang.text :as str]
-            [clojure.set :as set]
+            [kotoba.lang.coll :as set]
             [kotoba.io :as io]
             [mediarepro.store :as store]
             [mediarepro.operation :as op]
