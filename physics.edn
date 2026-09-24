@@ -1,0 +1,45 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:dev:physics` runs it.
+;;
+;; The README has no "Robotics premise" section; its Scope names the plant
+;; this actor coordinates: disc-replication lines (injection-moulded
+;; polycarbonate CD/DVD/Blu-ray copies from an authorised master) and
+;; print-and-package lines (ISIC 1820). The physical work of that plant:
+;; cooling each moulded disc in the mould until it can be ejected, moving
+;; stacked spindles of finished discs to packaging, and carrying cartons of
+;; packaged media to the shipping dock.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isic-1820"
+ :cases
+ [{:id :disc-in-mould-cooling
+   :kind :thermal
+   :procedure "moulded polycarbonate disc cools against the 60 C mould until its mid-plane falls below 130 C for ejection (half thickness, mid-plane adiabatic)"
+   :params {:thickness-m 0.0006 :conductivity-w-mk 0.2 :density-kg-m3 1200.0 :specific-heat-j-kgk 1250.0
+            :t0-c 320.0 :t-hot-c 60.0 :front-fixed? true :h-back-w-m2k 0.0
+            :threshold-c 130.0 :threshold-direction :falling :duration-s 10.0 :nodes 11}
+   :sweep {:param :thickness-m :values [0.0004 0.0005 0.0006 0.0008 0.001]}
+   :quantity :time-to-threshold-s
+   :limit {:max 2.0 :basis "estimate: a disc-replication line cycles in a few seconds; cooling is allowed about 2 s of it"}
+   :boundary {:lo 0.0002 :hi 0.0015}}
+  {:id :spindle-to-packaging
+   :kind :manipulator
+   :procedure "arm lifts a spindle of finished discs from the line's output stacker to the packaging infeed"
+   :params {:l1-m 0.40 :l2-m 0.35 :m1-kg 4.0 :m2-kg 3.0
+            :from [0.50 0.05] :to [0.15 0.50] :duration-s 1.5 :steps 400}
+   :sweep {:param :payload-kg :values [0.5 1.0 2.0 3.0 4.0]}
+   :quantity :peak-tau1-nm
+   :limit {:max 40.0 :basis "estimate: continuous shoulder torque of a light (~3-5 kg payload) pick-and-place arm"}
+   :boundary {:lo 0.1 :hi 20.0}}
+  {:id :carton-pallet-to-dock
+   :kind :transport
+   :procedure "pallet AMR carries packaged-media cartons from the packing line to the shipping dock"
+   :params {:mass-kg 250.0 :distance-m 60.0 :v-max-mps 1.2 :a-max-mps2 0.5
+            :brake-decel-mps2 0.8 :drive-force-n 800.0 :crr 0.015
+            :cog-height-m 0.35 :support-half-length-m 0.50 :max-time-s 2000.0}
+   :sweep {:param :payload-kg :values [100.0 300.0 600.0 1000.0 1500.0]}
+   :quantity :cycle-time-s
+   :limit {:max 60.0 :basis "estimate: one dock leg within a one-minute slot so the packing line does not back up"}
+   :boundary {:lo 50.0 :hi 5000.0}}]}
